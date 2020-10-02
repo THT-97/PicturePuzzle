@@ -17,7 +17,7 @@ int trace[MAX];
 int currentTrace = 0;
 /* Results:
 Depth 1 step: couldn't solve 435710268,435760281,435706281 (solved 13)
-Depth 5 steps: solved until 435760281 (solved 14)
+Depth 6 steps: solved until 435760281 (solved 14)
 */
 void printPicture(int *pic){
 	for(int i=0; i<n; i++){
@@ -68,11 +68,12 @@ int estimateCost(int *puzzle, int currentStep, int estimated, int maxSteps){
 		if(tryStep(puzzle, moves[i])!=NULL){
 		//if step is valid and is not in traces
 			if(!hadTrace(getKey(puzzle))){
+				//add trace
 				currentTrace += 1;
 				trace[currentTrace] = getKey(puzzle);
+				//estimate deeper steps
 				if(estimated<maxSteps) c[i] = getCost(puzzle, currentStep) 
 					+ estimateCost(puzzle, currentStep+1, estimated+1, maxSteps);
-				else c[i] = getCost(puzzle, currentStep);
 				//remove trace
 				trace[currentTrace] = 0;
 				currentTrace -= 1;
@@ -92,14 +93,17 @@ void solvePuzzle(int* puzzle){
 		for(int i=0; i<4; i++){
 			if(tryStep(puzzle, moves[i])!= NULL){
 				if(!hadTrace(getKey(puzzle))){
+					//add trace
 					currentTrace += 1;
 					trace[currentTrace] = getKey(puzzle);
-					//remove estimateCost if used for depth = 1
-					costs[i] = getCost(puzzle,step)+estimateCost(puzzle,step+1,1,5);
+					//use 0 for max steps of estimateCost for depth = 1;
+					costs[i] = getCost(puzzle,step)+estimateCost(puzzle,step+1,1,6);
+					//remove trace
 					trace[currentTrace] = 0;
 					currentTrace -= 1;
 				}
 				else costs[i] = -1;
+				//undo step
 				tryStep(puzzle, -moves[i]);
 			}
 			else costs[i] = -1;
@@ -129,5 +133,6 @@ int main(){
 	//---------------------------------
 	cout<<endl<<"Solving puzzle:"<<endl;
 	solvePuzzle(puzzle);
+	getchar();
 	return 0;
 }
