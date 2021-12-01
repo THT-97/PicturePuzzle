@@ -1,19 +1,18 @@
 #include <iostream>
-#include <math.h>
 #define MAX 1024
 using namespace std;
 
 int n = 9; //total elements
 int d = 3; //elements on a row
-int picture[9] = {1,2,3,4,0,5,6,7,8}; //Picture 3x3
+int picture[] = {1,2,3,4,0,5,6,7,8}; //Picture 3x3
 int picKey;
 /*puzzle making progress
 123405678->103425678->013425678->413025678->413205678->413275608
 ->413275068->413075268->413705268->403715268->430715268->435710268
 ->435701268->435761208->435761280->435760281->435706281*/
-int puzzle[9] = {4,3,5,7,6,1,2,8,0};
-int moves[4] = {1,-1,d,-d};
-int costs[4] = {0,0,0,0};
+int puzzle[] = {4,3,5,7,6,1,2,8,0};
+int moves[] = {1,-1,d,-d};
+int costs[] = {0,0,0,0};
 int trace[MAX];
 int currentTrace = 0;
 /* Results:
@@ -25,15 +24,6 @@ void printPicture(int *pic){
 		cout<<pic[i];
 		if((i+1)%d==0) cout<<endl;
 	}
-}
-
-void printPicture(int trace){
-	int pic[n];
-	for(int i=n-1; i>=0; i--){
-		pic[i] = trace%10;
-		trace /= 10;
-	}
-	printPicture(pic);
 }
 
 void getPicture(int* pic, int trace){
